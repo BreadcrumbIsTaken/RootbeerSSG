@@ -1,0 +1,5 @@
+Jinja2==3.0.0
+Markdown==3.3.4
+markdown-full-yaml-metadata==2.0.1
+MarkupSafe==2.0.0
+PyYAML==5.4.1
