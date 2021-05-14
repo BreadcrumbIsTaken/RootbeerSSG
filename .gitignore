@@ -1,4 +1,5 @@
 .idea/
 env/
 __pycache__/
-content/
+content/test.md
+content/test2.md
