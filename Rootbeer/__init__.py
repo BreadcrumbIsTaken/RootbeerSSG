@@ -4,6 +4,7 @@ from glob import glob
 
 # Module Imports
 from markdown import Markdown
+from jinja2 import Environment, FileSystemLoader
 
 # Rootbeer Imports
 from .utils import *
@@ -13,11 +14,15 @@ from .errors import RBContentMetadataMissingRequiredField, RBContentMissingMetad
 class RootbeerSSG:
     def __init__(self, config_file='.rbconfig',
                  content_directory='rb_content',
+                 output_directory='public',
+                 blog_directory='blog',
                  markdown_file_extention='md',
                  list_of_required_metadata_fields=['title']) -> None:
         # ===== VARIABLES =====
         self.config_file = config_file
         self.cont_dir = content_directory
+        self.out_dir = output_directory
+        self.blog_dir = blog_directory
 
         self.required_metadata_fields = list_of_required_metadata_fields
 
@@ -26,6 +31,7 @@ class RootbeerSSG:
         # ===== INSTANCES =====
         # Creates a new object with the full_yaml_metadata extention already activated.
         self.md = Markdown(extensions=['full_yaml_metadata'])
+        self.env = Environment(loader=FileSystemLoader(searchpath='templates/'))
 
         # ===== OPTIONAL VARIABLES =====
         self.md_ext = markdown_file_extention
@@ -33,6 +39,8 @@ class RootbeerSSG:
         # ===== FUNCTION CALLS =====
         self._rb_load_config()
         self._rb_load_site_content()
+        self._rb_write_to_html_file()
+
 
     def _rb_load_config(self) -> None:
         """
@@ -79,3 +87,14 @@ class RootbeerSSG:
             item['content'] = parsed_content
             # Append it to the list of content.
             self.content.append(item)
+
+
+    def _rb_write_to_html_file(self) -> None:
+        template = self.env.get_template('index.html')
+        with open(f'{self.out_dir}/index.html', 'w') as file:
+            file.write(
+                template.render(
+                    title=self.config['site_name'],
+                    content=self.content[0]['content']
+                )
+            )

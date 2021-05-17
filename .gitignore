@@ -1,5 +1,13 @@
+# Pycharm Data
 .idea/
+# Python Data
 env/
 __pycache__/
+# Rootbeer Data
 content/test.md
 content/test2.md
+public/
+# Replit Data
+.replit
+poetry.lock
+pyproject.toml
