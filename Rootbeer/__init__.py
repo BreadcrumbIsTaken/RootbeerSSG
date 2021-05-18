@@ -5,10 +5,11 @@ from glob import glob
 # Module Imports
 from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader
+from colorama import Fore
 
 # Rootbeer Imports
 from .utils import *
-from .errors import RBContentMetadataMissingRequiredField, RBContentMissingMetadata
+from .errors import *
 
 
 class RootbeerSSG:
@@ -39,7 +40,10 @@ class RootbeerSSG:
         # ===== FUNCTION CALLS =====
         self._rb_load_config()
         self._rb_load_site_content()
-        self._rb_write_to_html_file()
+        self._rb_create_and_render_index()
+
+        # ===== SITE GEN FINISHED =====
+        print(Fore.GREEN + f'Finished! Your static files can be found in "{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}"' + Fore.RESET)
 
 
     def _rb_load_config(self) -> None:
@@ -89,8 +93,9 @@ class RootbeerSSG:
             self.content.append(item)
 
 
-    def _rb_write_to_html_file(self) -> None:
+    def _rb_create_and_render_index(self) -> None:
         template = self.env.get_template('index.html')
+        rb_create_and_or_clean_path(f'{self.out_dir}')
         with open(f'{self.out_dir}/index.html', 'w') as file:
             file.write(
                 template.render(
