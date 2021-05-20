@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/BreadcrumbIsTaken/Rootbeer-SSG/.github/rootbeer-logo.png">
+    <img src="https://github.com/BreadcrumbIsTaken/Rootbeer-SSG/blob/main/.github/rootbeer-logo.png">
     <h1>Rootbeer-SSG 🍺</h1>
     <h3>The easy to use and very epic static site generator for blogs!</h3>
     <h6>Just think of the emoji above as a glass of rootbeer ok?</h6>
