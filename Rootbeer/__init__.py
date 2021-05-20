@@ -1,6 +1,5 @@
 # Python Standard Library Imports
-from typing import Union, Optional
-from yaml import safe_load
+from typing import Optional
 from glob import glob
 
 # Module Imports
@@ -15,10 +14,18 @@ from .errors import *
 
 class RootbeerSSG:
     def __init__(self,
-                 site_config: Union[str, dict, None] = '.rbconfig',
+                 site_title: Optional[str] = 'RootbeerSSG!',
+                 pretty_permalinks_on_blog_posts=True,
+                 sort_posts_by: Optional[str] = 'date',
+                 sort_pages_by: Optional[str] = 'title',
+                 sort_posts_reverse=True,
+                 sort_pages_reverse=False,
+                 date_format_for_content='%D at %I:%M %r',
                  content_directory: Optional[str] = 'rb_content',
                  output_directory: Optional[str] = 'public',
                  blog_directory: Optional[str] = 'blog',
+                 templates_directory: Optional[str] = 'templates',
+                 theme_name: Optional[str] = 'RBDefault',
                  markdown_file_extention: Optional[str] = 'md',
                  list_of_required_metadata_fields: Optional[list] = None,
                  markdown_extentions: Optional[dict] = None,
@@ -27,8 +34,24 @@ class RootbeerSSG:
         """
         The class that genrates all the site's data and renders everything. The core or the module.
 
-        :param site_config: The site's config can be either a python dictionary, or YAML syntax file. Both are falid.
-            TOML syntax coming soon. Default is ".rbconfig"
+        :param site_title: The title for your site. Default is "RootbeerSSG!"
+
+        :param pretty_permalinks_on_blog_posts: Do not add the date the post was written to the post's url.
+            Default is "True"
+
+        :param sort_posts_by: How to sort the posts. The options are determined by the content's metadata.
+            Default is "date"
+
+        :param sort_pages_by: How to sort the pages. The options are determined by the content's metadata.
+            Default is "title"
+
+        :param sort_posts_reverse: Sort the posts reverse or not. Default is "True". Works best if you sort by date.
+
+        :param sort_pages_reverse: Sort the pages reverse or not. Default is "False".
+
+        :param date_format_for_content: The way to format the date of the content. Uses the % time formatting notation.
+            Default is "%D at %I:%M %r", meaning "mm/dd/yy at H:M a.m./p.m."
+            example: "5/20/21 at 11:57 a.m."
 
         :param content_directory: The directory that contains the markdown files to parse. Default is "rb_content"
 
@@ -40,22 +63,25 @@ class RootbeerSSG:
         :param markdown_file_extention: The file extention to use for your content. Default is "md"
 
         :param list_of_required_metadata_fields: A list of all the required fields for content metadata. If empty or
-            None, then metadata is not required. Default is "title"
+            None, then metadata is not required. Default is ["title", "date"]
 
         :param markdown_extentions: The extentions to use for the markdown parser. You can find all the extentions
             avaliable here: [INSERT GITHUB WIKI PAGE HERE.] The extentions will be installed automaticlly. The key is
             the install name, the value is the import name.
             Default: KEY: "markdown-full-yaml-metadata" VALUE: "full_yaml_metadata"
 
-        :param rootbeer_plugins: A dictionary of plugins to use for changing the way RootbeerSSG functions.
+        :param rootbeer_plugins: A dictionary of plugins to use for changing the way Rootbeer-SSG functions.
             The extentions will be isntalled automaticallly. Just like the markdown plugins, the key is the insall name,
             and the value is the import name. Default: {}
         """
 
+        #! Make a plugin that allow un-pretty permalinks so the date_format and pretty_permalinks params can be
+        #! Optional and make it so they are stated in a config file for the plugin to un-clutter the main class.
+
         # ===== MUTABLE PARAMS =====
         if list_of_required_metadata_fields is None:
             # This just makes it so that the "title" metadata feild is required by default
-            list_of_required_metadata_fields = ['title']
+            list_of_required_metadata_fields = ['title', 'date']
         if markdown_extentions is None:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
@@ -64,10 +90,13 @@ class RootbeerSSG:
             rootbeer_plugins = {}
 
         # ===== GLOBAL VARIABLES =====
-        self.config_file = site_config
+        self.site_title = site_title
+        self.pretty_permalinks = pretty_permalinks_on_blog_posts
         self.cont_dir = content_directory
         self.out_dir = output_directory
         self.blog_dir = blog_directory
+        self.theme = theme_name
+        self.template_dir = templates_directory
 
         self.required_metadata_fields = list_of_required_metadata_fields
         self.md_extentions = markdown_extentions
@@ -77,6 +106,7 @@ class RootbeerSSG:
 
         # ===== VARIABLES =====
         list_of_extentions_for_markdown = list()
+        search_path = f'{self.template_dir}/{self.theme}'
 
         # ===== PREPROCESSORS =====
         for ext in self.md_extentions:
@@ -86,28 +116,18 @@ class RootbeerSSG:
         # ===== INSTANCES =====
         # ? Creates a new object with the full_yaml_metadata extention already activated.
         self.md = Markdown(extensions=list_of_extentions_for_markdown)
-        self.env = Environment(loader=FileSystemLoader(searchpath='templates/'))
+        self.env = Environment(loader=FileSystemLoader(searchpath=search_path))
 
         # ===== OPTIONAL VARIABLES =====
         self.md_ext = markdown_file_extention
 
         # ===== FUNCTION CALLS =====
-        self._rb_load_config()
         self._rb_load_site_content()
         self._rb_create_and_render_index()
 
         # ===== SITE GEN FINISHED =====
         print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
                            f'"{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}"' + Fore.RESET)
-
-    def _rb_load_config(self) -> None:
-        """
-        Loads the site's config. The config file can have any extention, as long as it follows YAML's syntax.
-        The default file is ".rbconfig"
-        """
-        with open(self.config_file, 'r') as conf_file:
-            # ? Creates the config variable for the whole class.
-            self.config = safe_load(conf_file)
 
     def _rb_load_site_content(self) -> None:
         # Creates the directory that contains the markdown if it does not exist already.
@@ -152,7 +172,7 @@ class RootbeerSSG:
         with open(f'{self.out_dir}/index.html', 'w') as file:
             file.write(
                 template.render(
-                    title=self.config['site_name'],
+                    title=self.site_title,
                     content=self.content[0]['content']
                 )
             )

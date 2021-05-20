@@ -9,6 +9,23 @@
 
 Rootbeer-SSG (or simply just Rootbeer) is a Static Site Generator for generating blogs.
 
+# How to download Rootbeer-SSG
+
+It's easy!
+
+All you have to do is open a terminal and put this line into it:
+```bash
+pip install rootbeer
+```
+Or
+```bash
+python -m pip install rootbeer
+```
+Or
+```bash
+python3 -m pip install rootbeer
+```
+
 # Why tho???
 
 Because I felt like it lol and WordPress is the monez
