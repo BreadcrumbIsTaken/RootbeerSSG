@@ -1,10 +1,11 @@
 # Python Standard Library Imports
 from typing import Optional
 from glob import glob
+from os import path
 
 # Module Imports
 from markdown import Markdown
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader, Template
 from colorama import Fore
 
 # Rootbeer Imports
@@ -15,11 +16,11 @@ from .errors import *
 class RootbeerSSG:
     def __init__(self,
                  site_title: Optional[str] = 'RootbeerSSG!',
-                 pretty_permalinks_on_blog_posts=True,
+                 pretty_permalinks_on_blog_posts: bool = True,
                  sort_posts_by: Optional[str] = 'date',
                  sort_pages_by: Optional[str] = 'title',
-                 sort_posts_reverse=True,
-                 sort_pages_reverse=False,
+                 sort_posts_reverse: bool = True,
+                 sort_pages_reverse: bool = False,
                  date_format_for_content='%D at %I:%M %r',
                  content_directory: Optional[str] = 'rb_content',
                  output_directory: Optional[str] = 'public',
@@ -29,7 +30,8 @@ class RootbeerSSG:
                  markdown_file_extention: Optional[str] = 'md',
                  list_of_required_metadata_fields: Optional[list] = None,
                  markdown_extentions: Optional[dict] = None,
-                 rootbeer_plugins: Optional[dict] = None
+                 rootbeer_plugins: Optional[dict] = None,
+                 log_rootbeer_steps: bool = True,
                  ) -> None:
         """
         The class that genrates all the site's data and renders everything. The core or the module.
@@ -77,7 +79,6 @@ class RootbeerSSG:
 
         #! Make a plugin that allow un-pretty permalinks so the date_format and pretty_permalinks params can be
         #! Optional and make it so they are stated in a config file for the plugin to un-clutter the main class.
-
         # ===== MUTABLE PARAMS =====
         if list_of_required_metadata_fields is None:
             # This just makes it so that the "title" metadata feild is required by default
@@ -90,23 +91,23 @@ class RootbeerSSG:
             rootbeer_plugins = {}
 
         # ===== GLOBAL VARIABLES =====
-        self.site_title = site_title
-        self.pretty_permalinks = pretty_permalinks_on_blog_posts
-        self.cont_dir = content_directory
-        self.out_dir = output_directory
-        self.blog_dir = blog_directory
-        self.theme = theme_name
-        self.template_dir = templates_directory
+        self.site_title: str = site_title
+        self.pretty_permalinks: bool = pretty_permalinks_on_blog_posts
+        self.cont_dir: str = content_directory
+        self.out_dir: str = output_directory
+        self.blog_dir: str = blog_directory
+        self.theme: str = theme_name
+        self.template_dir: str = templates_directory
 
-        self.required_metadata_fields = list_of_required_metadata_fields
-        self.md_extentions = markdown_extentions
+        self.required_metadata_fields: list = list_of_required_metadata_fields
+        self.md_extentions: dict = markdown_extentions
 
-        self.content = list()
-        self.list_of_files_generated = list()
+        self.content: list = list()
+        self.list_of_files_generated: list = list()
 
         # ===== VARIABLES =====
-        list_of_extentions_for_markdown = list()
-        search_path = f'{self.template_dir}/{self.theme}'
+        list_of_extentions_for_markdown: list = list()
+        search_path: str = f'{self.template_dir}/{self.theme}'
 
         # ===== PREPROCESSORS =====
         for ext in self.md_extentions:
@@ -115,11 +116,11 @@ class RootbeerSSG:
 
         # ===== INSTANCES =====
         # ? Creates a new object with the full_yaml_metadata extention already activated.
-        self.md = Markdown(extensions=list_of_extentions_for_markdown)
-        self.env = Environment(loader=FileSystemLoader(searchpath=search_path))
+        self.md: Markdown = Markdown(extensions=list_of_extentions_for_markdown)
+        self.env: Environment = Environment(loader=FileSystemLoader(searchpath=search_path))
 
         # ===== OPTIONAL VARIABLES =====
-        self.md_ext = markdown_file_extention
+        self.md_ext: str = markdown_file_extention
 
         # ===== FUNCTION CALLS =====
         self._rb_load_site_content()
@@ -132,14 +133,17 @@ class RootbeerSSG:
     def _rb_load_site_content(self) -> None:
         # Creates the directory that contains the markdown if it does not exist already.
         rb_create_path_if_does_not_exist(self.cont_dir)
+        print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
 
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):
             with open(file) as content_file:
+                print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .')
                 # Parses the content and saves it to a variable.
-                parsed_content = self.md.convert(content_file.read())
+                parsed_content: str = self.md.convert(content_file.read())
+                print(f'{Fore.WHITE}"{path.basename(content_file.name)}" has been read!')
 
-            item = dict()
+            item: dict = dict()
             # ? Assigns the file name to the item
             item['file_name'] = content_file.name
 
@@ -167,7 +171,7 @@ class RootbeerSSG:
             self.content.append(item)
 
     def _rb_create_and_render_index(self) -> None:
-        template = self.env.get_template('index.html')
+        template: Template = self.env.get_template('index.html')
         rb_create_and_or_clean_path(f'{self.out_dir}')
         with open(f'{self.out_dir}/index.html', 'w') as file:
             file.write(
