@@ -173,10 +173,12 @@ class RootbeerSSG:
     def _rb_create_and_render_index(self) -> None:
         template: Template = self.env.get_template('index.html')
         rb_create_and_or_clean_path(f'{self.out_dir}')
+        print(self.content[0])
         with open(f'{self.out_dir}/index.html', 'w') as file:
             file.write(
                 template.render(
                     title=self.site_title,
-                    content=self.content[0]['content']
+                    content=self.content[0]['content'],
+                    meta=self.content[0]['metadata']
                 )
             )
