@@ -8,7 +8,7 @@ def readme():
 
 
 setup(
-    name='RootbeerSSG',
+    name='rootbeer',
     version='1.0.0',
     description='An easy to use Static Site Generator for blogs!',
     long_description=readme(),
@@ -22,7 +22,7 @@ setup(
         'Programming Language :: Python :: 3.8.6',
         'Natural Language :: English'
     ],
-    packages=['Rootbeer'],
+    packages=['rootbeer'],
     include_package_data=True,
     install_requires=['colorama', 'Jinaj2', 'Markdown', 'markdown-full-yaml-metadata', 'MarkupSafe', 'PyYAML']
 )

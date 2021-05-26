@@ -8,7 +8,7 @@ from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, Template
 from colorama import Fore
 
-# Rootbeer Imports
+# rootbeer Imports
 from .utils import *
 from .errors import *
 

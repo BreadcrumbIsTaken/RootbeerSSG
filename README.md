@@ -13,11 +13,11 @@
 [![Open source.](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/BreadcrumbIsTaken/RootbeerSSG)
 [![Built with swag](https://forthebadge.com/images/badges/built-with-swag.svg)](https://forthebadge.com)
 
-# What is RootbeerSSG? 🤔
+# What is Rootbeer? 🤔
 
 RootbeerSSG (or simply just Rootbeer) is a Static Site Generator for generating blogs.
 
-# How to download RootbeerSSG
+# How to download Rootbeer
 
 It's easy!
 
@@ -38,4 +38,4 @@ python3 -m pip install rootbeer
 
 Because I felt like it lol and WordPress is the monez
 
-<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/BreadcrumbIsTaken/RootbeerSSG">RootbeerSSG</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/BreadcrumbIsTaken/">BreadcrumbIsTaken</a> is licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></a></p> 
+<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/BreadcrumbIsTaken/RootbeerSSG">Rootbeer</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/BreadcrumbIsTaken/">BreadcrumbIsTaken</a> is licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></a></p> 
