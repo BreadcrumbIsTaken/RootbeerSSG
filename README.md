@@ -11,6 +11,7 @@
 [![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://python.org)
 [![Mom made pizza rolls](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
 [![Open source.](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/BreadcrumbIsTaken/Rootbeer-SSG)
+[![Built with swag](https://forthebadge.com/images/badges/built-with-swag.svg)](https://forthebadge.com)
 
 # What is Rootbeer-SSG? 🤔
 
