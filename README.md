@@ -5,6 +5,13 @@
     <h6>Just think of the emoji above as a glass of rootbeer ok?</h6>
 </div>
 
+[![Compatability: Club Penguin](https://forthebadge.com/images/badges/compatibility-club-penguin.svg)](https://forthebadge.com)
+[![Fo Shizzle](https://forthebadge.com/images/badges/fo-shizzle.svg)](https://forthebadge.com)
+[![It works. Why?](https://forthebadge.com/images/badges/it-works-why.svg)](https://forthebadge.com)
+[![Made with Python](https://forthebadge.com/images/badges/made-with-python.svg)](https://python.org)
+[![Mom made pizza rolls](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
+[![Open source.](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/BreadcrumbIsTaken/Rootbeer-SSG)
+
 # What is Rootbeer-SSG? 🤔
 
 Rootbeer-SSG (or simply just Rootbeer) is a Static Site Generator for generating blogs.
