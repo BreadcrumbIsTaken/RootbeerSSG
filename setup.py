@@ -20,7 +20,13 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.9.0',
         'Programming Language :: Python :: 3.8.6',
-        'Natural Language :: English'
+        'Operating System :: OS Independent',
+        'Natural Language :: English',
+        'Framework :: Rootbeer',
+        'Topic :: Internet :: WWW/HTTP',
+        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Static Site Generation',
+        'Topic :: Static Site Generation :: Blogs'
     ],
     packages=['rootbeer'],
     include_package_data=True,
