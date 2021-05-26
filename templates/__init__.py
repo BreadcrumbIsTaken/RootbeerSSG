@@ -1,1 +1,1 @@
-# This file is needed so Rootbeer-SSG can import your themes python files.
+# This file is needed so RootbeerSSG can import your themes python files.

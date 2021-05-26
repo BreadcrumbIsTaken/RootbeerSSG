@@ -8,12 +8,12 @@ def readme():
 
 
 setup(
-    name='Rootbeer-SSG',
+    name='RootbeerSSG',
     version='1.0.0',
     description='An easy to use Static Site Generator for blogs!',
     long_description=readme(),
     long_description_content_type='text/markdown',
-    url='https://github.com/BreadcrumbIsTaken/Rootbeer-SSG',
+    url='https://github.com/BreadcrumbIsTaken/RootbeerSSG',
     author='Breadcrumb',
     license='CC BY-SA 4.0',
     classifiers=[

@@ -72,7 +72,7 @@ class RootbeerSSG:
             the install name, the value is the import name.
             Default: KEY: "markdown-full-yaml-metadata" VALUE: "full_yaml_metadata"
 
-        :param rootbeer_plugins: A dictionary of plugins to use for changing the way Rootbeer-SSG functions.
+        :param rootbeer_plugins: A dictionary of plugins to use for changing the way RootbeerSSG functions.
             The extentions will be isntalled automaticallly. Just like the markdown plugins, the key is the insall name,
             and the value is the import name. Default: {}
         """
