@@ -104,6 +104,7 @@ class RootbeerSSG:
 
         self.content: list = list()
         self.list_of_files_generated: list = list()
+        self.content_types: list = ['post', 'page']
 
         # ===== VARIABLES =====
         list_of_extentions_for_markdown: list = list()
