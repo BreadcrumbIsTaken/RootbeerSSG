@@ -10,7 +10,7 @@ def readme():
 setup(
     name='rootbeer',
     version='1.0.0',
-    description='An easy to use Static Site Generator for blogs!',
+    description='The easy to use and very epic static site generator for blogs!',
     long_description=readme(),
     long_description_content_type='text/markdown',
     url='https://github.com/BreadcrumbIsTaken/RootbeerSSG',
