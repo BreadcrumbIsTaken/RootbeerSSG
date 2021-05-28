@@ -9,12 +9,13 @@ sort_pages_by: title
 sort_posts_reverse: true
 sort_pages_reverse: false
 
-date_format_for_content: %m/%d/%y at %H:%M
+date_format_for_content: "%m/%d/%y at %H:%M"
 
-content_directory: rb_content
+content_directory: content
 output_directory: public
 blog_directory: blog
 
+themes_dir: themes
 theme_name: RBDefault
 
 markdown_file_extention: md
@@ -26,4 +27,4 @@ list_of_required_metadata_fields:
 markdown_extentions:
   markdown-full-yaml-metadata: full_yaml_metadata
 
-log_steps: true
+log_rootbeer_steps: true
