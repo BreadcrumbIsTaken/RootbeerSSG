@@ -2,11 +2,13 @@
 from typing import Optional
 from glob import glob
 from os import path
+from datetime import datetime
+import pathlib
 
 # Module Imports
 from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, Template
-from colorama import Fore
+from slug import slug
 
 # rootbeer Imports
 from .utils import *
@@ -16,16 +18,16 @@ from .errors import *
 class RootbeerSSG:
     def __init__(self,
                  site_title: Optional[str] = 'RootbeerSSG!',
-                 pretty_permalinks_on_blog_posts: bool = True,
+                 pretty_permalinks_on_blog_posts: bool = False,
+                 pretty_permalinks_on_pages: bool = True,
                  sort_posts_by: Optional[str] = 'date',
                  sort_pages_by: Optional[str] = 'title',
                  sort_posts_reverse: bool = True,
                  sort_pages_reverse: bool = False,
-                 date_format_for_content='%D at %I:%M %r',
+                 date_format_for_content='%m/%d/%y at %H:%M',
                  content_directory: Optional[str] = 'rb_content',
                  output_directory: Optional[str] = 'public',
                  blog_directory: Optional[str] = 'blog',
-                 templates_directory: Optional[str] = 'templates',
                  theme_name: Optional[str] = 'RBDefault',
                  markdown_file_extention: Optional[str] = 'md',
                  list_of_required_metadata_fields: Optional[list] = None,
@@ -39,6 +41,9 @@ class RootbeerSSG:
         :param site_title: The title for your site. Default is "RootbeerSSG!"
 
         :param pretty_permalinks_on_blog_posts: Do not add the date the post was written to the post's url.
+            Default is "False"
+
+        :param pretty_permalinks_on_pages: Do not add the date the page was written to the page's url.
             Default is "True"
 
         :param sort_posts_by: How to sort the posts. The options are determined by the content's metadata.
@@ -52,8 +57,8 @@ class RootbeerSSG:
         :param sort_pages_reverse: Sort the pages reverse or not. Default is "False".
 
         :param date_format_for_content: The way to format the date of the content. Uses the % time formatting notation.
-            Default is "%D at %I:%M %r", meaning "mm/dd/yy at H:M a.m./p.m."
-            example: "5/20/21 at 11:57 a.m."
+            Default is "%m/%d/%y at %H:%M", meaning "mm/dd/yy at H:M."
+            example: "5/20/21 at 13:57" will be parsed as "5/20/21 at 1:37 PM"
 
         :param content_directory: The directory that contains the markdown files to parse. Default is "rb_content"
 
@@ -77,8 +82,8 @@ class RootbeerSSG:
             and the value is the import name. Default: {}
         """
 
-        #! Make a plugin that allow un-pretty permalinks so the date_format and pretty_permalinks params can be
-        #! Optional and make it so they are stated in a config file for the plugin to un-clutter the main class.
+        # ! Make a plugin that allow un-pretty permalinks so the date_format and pretty_permalinks params can be
+        # ! Optional and make it so they are stated in a config file for the plugin to un-clutter the main class.
         # ===== MUTABLE PARAMS =====
         if list_of_required_metadata_fields is None:
             # This just makes it so that the "title" metadata feild is required by default
@@ -92,12 +97,19 @@ class RootbeerSSG:
 
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = site_title
-        self.pretty_permalinks: bool = pretty_permalinks_on_blog_posts
+        self.pretty_p: bool = pretty_permalinks_on_blog_posts
+        self.pretty_p_pages: bool = pretty_permalinks_on_pages
         self.cont_dir: str = content_directory
         self.out_dir: str = output_directory
         self.blog_dir: str = blog_directory
         self.theme: str = theme_name
-        self.template_dir: str = templates_directory
+        self.themes_dir: str = 'themes'
+        self.date_format: str = date_format_for_content
+
+        self.sort_pages: str = sort_pages_by
+        self.sort_pages_reversed: bool = sort_pages_reverse
+        self.sort_posts: str = sort_posts_by
+        self.sort_posts_reversed: bool = sort_posts_reverse
 
         self.required_metadata_fields: list = list_of_required_metadata_fields
         self.md_extentions: dict = markdown_extentions
@@ -108,7 +120,7 @@ class RootbeerSSG:
 
         # ===== VARIABLES =====
         list_of_extentions_for_markdown: list = list()
-        search_path: str = f'{self.template_dir}/{self.theme}'
+        search_path: str = f'{self.themes_dir}/{self.theme}'
 
         # ===== PREPROCESSORS =====
         for ext in self.md_extentions:
@@ -124,12 +136,13 @@ class RootbeerSSG:
         self.md_ext: str = markdown_file_extention
 
         # ===== FUNCTION CALLS =====
+        rb_create_and_or_clean_path(self.out_dir)
         self._rb_load_site_content()
-        self._rb_create_and_render_index()
+        self._rb_render_all_content_types()
 
         # ===== SITE GEN FINISHED =====
         print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
-                           f'"{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}"' + Fore.RESET)
+                           f'"{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}".' + Fore.RESET)
 
     def _rb_load_site_content(self) -> None:
         # Creates the directory that contains the markdown if it does not exist already.
@@ -139,10 +152,10 @@ class RootbeerSSG:
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):
             with open(file) as content_file:
-                print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .')
+                print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .' + Fore.RESET)
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
-                print(f'{Fore.WHITE}"{path.basename(content_file.name)}" has been read!')
+                print(f'{Fore.GREEN}"{path.basename(content_file.name)}" has been read!' + Fore.RESET)
 
             item: dict = dict()
             # ? Assigns the file name to the item
@@ -166,20 +179,67 @@ class RootbeerSSG:
                     # If there is no metadata when it is required, throw and error.
                     raise RBContentMissingMetadata(f'The file, "{content_file.name}", does not contain any metadata.')
 
+            item['date'] = self.md.Meta['date']
+            date: datetime = datetime.strptime(item['date'], self.date_format)
+            item['date'] = date
+            item['readable_date'] = date.strftime(self.date_format.replace('%H:%M', '%I:%M %p'))
+
+            # Gets the content's slug
+            item_path: str = path.splitext(path.relpath(content_file.name))[0]
+            paths_to_remove: list = [f'{self.cont_dir}']
+            for ct in self.content_types:
+                # Addes the content types plural to the list of paths.
+                # EX: content/pages
+                paths_to_remove.append(f'{ct}s')
+            final_path_list: list = [word for word in item_path.split('\\') if word not in paths_to_remove]
+            item['slug'] = slug('/'.join(final_path_list))
+
+            blog_out_dir = self.out_dir + '/' + self.blog_dir
+
+            # Creates the content's url
+            if item['metadata']['type'] == 'post':
+                if self.pretty_p:
+                    item['url'] = f'{blog_out_dir}/{item["slug"]}'
+                else:
+                    item['url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/{item["date"].day:0>2}' \
+                                  f'/{item["slug"]}'
+
+            if item['metadata']['type'] == 'page':
+                if self.pretty_p_pages:
+                    item['url'] = f'{self.out_dir}/{item["slug"]}'
+                else:
+                    item['url'] = f'{self.out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
+                                  f'{item["date"].day:0>2}/{item["slug"]}'
+
             # ? Finally, add the parsed content to the item.
             item['content'] = parsed_content
             # Append it to the list of content.
             self.content.append(item)
 
-    def _rb_create_and_render_index(self) -> None:
-        template: Template = self.env.get_template('index.html')
-        rb_create_and_or_clean_path(f'{self.out_dir}')
-        print(self.content[0])
-        with open(f'{self.out_dir}/index.html', 'w') as file:
-            file.write(
-                template.render(
-                    title=self.site_title,
-                    content=self.content[0]['content'],
-                    meta=self.content[0]['metadata']
+            sort_content_types: dict = dict()
+            sort_content_types['page'] = dict()
+            sort_content_types['post'] = dict()
+            sort_content_types['page']['sort_by'] = self.sort_pages
+            sort_content_types['page']['sort_reversed'] = self.sort_pages_reversed
+            sort_content_types['post']['sort_by'] = self.sort_posts
+            sort_content_types['post']['sort_reversed'] = self.sort_posts_reversed
+
+            for content_type in self.content_types:
+                self.content.sort(key=lambda x: sort_content_types[content_type]['sort_by'],
+                                  reverse=sort_content_types[content_type]['sort_reversed'])
+
+    def _rb_render_all_content_types(self) -> None:
+        for item in self.content:
+            template: Template = self.env.get_template(f'{item["metadata"]["type"]}.html')
+            content_path = item['url']
+
+            pathlib.Path(content_path).mkdir(parents=True, exist_ok=True)
+            with open(f'{content_path}/index.html', 'w') as file:
+                file.write(
+                    template.render(
+                        this=item,
+                        site_title=self.site_title
+                    )
                 )
-            )
+
+        rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir)
