@@ -32,7 +32,6 @@ class RootbeerSSG:
                  markdown_file_extention: Optional[str] = 'md',
                  list_of_required_metadata_fields: Optional[list] = None,
                  markdown_extentions: Optional[dict] = None,
-                 rootbeer_plugins: Optional[dict] = None,
                  log_rootbeer_steps: bool = True,
                  ) -> None:
         """
@@ -76,10 +75,6 @@ class RootbeerSSG:
             avaliable here: [INSERT GITHUB WIKI PAGE HERE.] The extentions will be installed automaticlly. The key is
             the install name, the value is the import name.
             Default: KEY: "markdown-full-yaml-metadata" VALUE: "full_yaml_metadata"
-
-        :param rootbeer_plugins: A dictionary of plugins to use for changing the way RootbeerSSG functions.
-            The extentions will be isntalled automaticallly. Just like the markdown plugins, the key is the insall name,
-            and the value is the import name. Default: {}
         """
 
         # ! Make a plugin that allow un-pretty permalinks so the date_format and pretty_permalinks params can be
@@ -91,9 +86,6 @@ class RootbeerSSG:
         if markdown_extentions is None:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
-        if rootbeer_plugins is None:
-            # TODO!! Work on making plugins soon.
-            rootbeer_plugins = {}
 
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = site_title
@@ -118,6 +110,8 @@ class RootbeerSSG:
         self.list_of_files_generated: list = list()
         self.content_types: list = ['post', 'page']
 
+        self.log_steps = log_rootbeer_steps
+
         # ===== VARIABLES =====
         list_of_extentions_for_markdown: list = list()
         search_path: str = f'{self.themes_dir}/{self.theme}'
@@ -126,6 +120,12 @@ class RootbeerSSG:
         for ext in self.md_extentions:
             # Appends the import word into the list
             list_of_extentions_for_markdown.append(self.md_extentions[ext])
+
+        if self.log_steps:
+            f'{Fore.MAGENTA}Installing markdown extentions. . .{Fore.RESET}'
+        rb_install_markdown_extras_modules(markdown_extentions.keys())
+        if self.log_steps:
+            print(f'{Fore.GREEN}Markdown extentions installed!{Fore.RESET}')
 
         # ===== INSTANCES =====
         # ? Creates a new object with the full_yaml_metadata extention already activated.
@@ -147,15 +147,18 @@ class RootbeerSSG:
     def _rb_load_site_content(self) -> None:
         # Creates the directory that contains the markdown if it does not exist already.
         rb_create_path_if_does_not_exist(self.cont_dir)
-        print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
+        if self.log_steps:
+            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
 
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):
             with open(file) as content_file:
-                print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .' + Fore.RESET)
+                if self.log_steps:
+                    print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .' + Fore.RESET)
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
-                print(f'{Fore.GREEN}"{path.basename(content_file.name)}" has been read!' + Fore.RESET)
+                if self.log_steps:
+                    print(f'{Fore.GREEN}"{path.basename(content_file.name)}" has been read!' + Fore.RESET)
 
             item: dict = dict()
             # ? Assigns the file name to the item
@@ -233,6 +236,9 @@ class RootbeerSSG:
             template: Template = self.env.get_template(f'{item["metadata"]["type"]}.html')
             content_path = item['url']
 
+            if self.log_steps:
+                print(f'{Fore.YELLOW}Rendering "{item["slug"]}". . .')
+
             pathlib.Path(content_path).mkdir(parents=True, exist_ok=True)
             with open(f'{content_path}/index.html', 'w') as file:
                 file.write(
@@ -242,4 +248,7 @@ class RootbeerSSG:
                     )
                 )
 
-        rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir)
+            if self.log_steps:
+                print(f'{Fore.GREEN}Rendered "{item["slug"]}"!')
+
+        rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir, self.log_steps)

@@ -1,0 +1,29 @@
+site_title: RootbeerSSG!
+
+pretty_permalinks_on_posts: false
+pretty_permalinks_on_pages: true
+
+sort_posts_by: date
+sort_pages_by: title
+
+sort_posts_reverse: true
+sort_pages_reverse: false
+
+date_format_for_content: %m/%d/%y at %H:%M
+
+content_directory: rb_content
+output_directory: public
+blog_directory: blog
+
+theme_name: RBDefault
+
+markdown_file_extention: md
+
+list_of_required_metadata_fields:
+  - title
+  - date
+
+markdown_extentions:
+  markdown-full-yaml-metadata: full_yaml_metadata
+
+log_steps: true

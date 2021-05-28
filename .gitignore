@@ -10,3 +10,6 @@ public/
 .replit
 poetry.lock
 pyproject.toml
+
+test.py
+test.py
