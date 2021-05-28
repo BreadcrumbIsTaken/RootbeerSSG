@@ -16,9 +16,7 @@ from .errors import *
 
 
 class RootbeerSSG:
-    def __init__(self,
-                 config_file: str = '.rbconfig'
-                 ) -> None:
+    def __init__(self, config_file: str = '.rbconfig') -> None:
         """
         The class that genrates all the site's data and renders everything. The core or the module.
 
@@ -197,7 +195,7 @@ class RootbeerSSG:
                 file.write(
                     template.render(
                         this=item,
-                        site_title=self.site_title
+                        config=self.config,
                     )
                 )
 
