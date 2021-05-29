@@ -23,6 +23,8 @@ def rb_create_and_or_clean_path(path: str) -> None:
     Cleans a path it it exists, and then remakes it. If it does not exist already, then just create it.
 
     :param path: The path to clean/create.
+
+    :return: None
     """
     if os.path.exists(path):
         rmtree(path)
@@ -36,6 +38,8 @@ def rb_copy_static_files_to_public_directory(path1: str, path2: str, log_steps: 
     :param path1: The static folder path.
     :param path2: The output folder path.
     :param log_steps: Weither to log the steps.
+
+    :return: None
     """
     if log_steps:
         print(f'{Fore.CYAN}Transfering static files to "{Fore.YELLOW}{path2}/{Fore.CYAN}". . .')
@@ -51,6 +55,8 @@ def rb_install_markdown_extras_modules(modules_to_install: KeysView[str]) -> Non
     Installs all mardown extnetions.
 
     :param modules_to_install: The modules to install.
+
+    :return: None
     """
     install_command: list = [executable, '-m', 'pip', 'install']
     for module in modules_to_install:

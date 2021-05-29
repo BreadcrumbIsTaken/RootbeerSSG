@@ -22,6 +22,8 @@ class RootbeerSSG:
 
         :param config_file: The config file for your site. Uses YAML syntax. Does not have to be a .rbconfig file.
             Default: .rbconfig
+
+        :return: None
         """
 
         # ===== READ CONFIG =====
@@ -72,10 +74,9 @@ class RootbeerSSG:
             # Appends the import word into the list
             list_of_extentions_for_markdown.append(self.md_extentions[ext])
 
-        if self.log_steps:
-            f'{Fore.MAGENTA}Installing markdown extentions. . .{Fore.RESET}'
-        rb_install_markdown_extras_modules(self.config['markdown_extentions'].keys())
-        if self.log_steps:
+        if self.config['auto_install_markdown_extentions']:
+            print(f'{Fore.MAGENTA}Installing markdown extentions. . .{Fore.RESET}')
+            rb_install_markdown_extras_modules(self.config['markdown_extentions'].keys())
             print(f'{Fore.GREEN}Markdown extentions installed!{Fore.RESET}')
 
         # ===== INSTANCES =====
@@ -90,12 +91,18 @@ class RootbeerSSG:
         rb_create_and_or_clean_path(self.out_dir)
         self._rb_load_site_content()
         self._rb_render_all_content_types()
+        self._rb_render_index_page()
 
         # ===== SITE GEN FINISHED =====
         print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
                            f'"{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}".' + Fore.RESET)
 
     def _rb_load_site_content(self) -> None:
+        """
+        Loads the site's content
+
+        :return: None
+        """
         # Creates the directory that contains the markdown if it does not exist already.
         rb_create_path_if_does_not_exist(self.cont_dir)
         if self.log_steps:
@@ -104,12 +111,8 @@ class RootbeerSSG:
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):
             with open(file) as content_file:
-                if self.log_steps:
-                    print(f'{Fore.LIGHTCYAN_EX}Reading "{path.basename(content_file.name)}". . .' + Fore.RESET)
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
-                if self.log_steps:
-                    print(f'{Fore.GREEN}"{path.basename(content_file.name)}" has been read!' + Fore.RESET)
 
             item: dict = dict()
             # ? Assigns the file name to the item
@@ -183,12 +186,14 @@ class RootbeerSSG:
                                   reverse=sort_content_types[content_type]['sort_reversed'])
 
     def _rb_render_all_content_types(self) -> None:
+        """
+        Renders all the content types.
+
+        :return: None
+        """
         for item in self.content:
             template: Template = self.env.get_template(f'{item["metadata"]["type"]}.html')
             content_path = item['url']
-
-            if self.log_steps:
-                print(f'{Fore.YELLOW}Rendering "{item["slug"]}". . .')
 
             pathlib.Path(content_path).mkdir(parents=True, exist_ok=True)
             with open(f'{content_path}/index.html', 'w') as file:
@@ -199,7 +204,19 @@ class RootbeerSSG:
                     )
                 )
 
-            if self.log_steps:
-                print(f'{Fore.GREEN}Rendered "{item["slug"]}"!')
-
         rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir, self.log_steps)
+
+    def _rb_render_index_page(self) -> None:
+        """
+        Renders the index page.
+
+        :return: None
+        """
+        template: Template = self.env.get_template('index.html')
+        with open(f'{self.out_dir}/index.html', 'w') as index_file:
+            index_file.write(
+                template.render(
+                    content=self.content,
+                    config=self.config,
+                )
+            )
