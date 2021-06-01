@@ -43,8 +43,9 @@ markdown_extentions:
   # If you are doing a built in markdown extention, then just do ~ or markdown
   # Example:
   # ~: fenced_code
-  markdown-full-yaml-metadata: full_yaml_metadat
+  markdown-full-yaml-metadata: full_yaml_metadata
+auto_install_markdown_extentions: false
 
 log_rootbeer_steps: true
 
-auto_install_markdown_extentions: false
+render_authors_pages: true

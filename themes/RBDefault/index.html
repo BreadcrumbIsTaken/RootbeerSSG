@@ -6,11 +6,9 @@
 
     <body>
         <h1>{{ config.site_title }}</h1>
-        {%- for post in content -%}
-            {%- if post.metadata.type == 'post' -%}
-                <h1>{{ post.metadata.title }}</h1>
-                {{ post.content }}
-            {% endif %}
+        {%- for post in posts -%}
+            <h1>{{ post.metadata.title }}</h1>
+            {{ post.content }}
         {% endfor %}
     </body>
 </html>

@@ -36,6 +36,8 @@ class RootbeerSSG:
         if 'list_of_required_metadata_fields' in self.config:
             # This just makes it so that the "title" metadata feild is required by default
             list_of_required_metadata_fields = ['title', 'date']
+            if self.config['render_authors_pages']:
+                list_of_required_metadata_fields.append('author')
         if 'markdown_extentions' in self.config:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
@@ -90,6 +92,16 @@ class RootbeerSSG:
         # ===== FUNCTION CALLS =====
         rb_create_and_or_clean_path(self.out_dir)
         self._rb_load_site_content()
+
+        # ===== CONTENT SORTING =====
+        self.pages: list = list()
+        self.posts: list = list()
+        for cont in self.content:
+            if cont['metadata']['type'] == 'page':
+                self.pages.append(cont)
+            elif cont['metadata']['type'] == 'post':
+                self.posts.append(cont)
+
         self._rb_render_all_content_types()
         self._rb_render_index_page()
 
@@ -216,7 +228,8 @@ class RootbeerSSG:
         with open(f'{self.out_dir}/index.html', 'w') as index_file:
             index_file.write(
                 template.render(
-                    content=self.content,
+                    posts=self.posts,
+                    pages=self.pages,
                     config=self.config,
                 )
             )
