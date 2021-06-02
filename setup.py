@@ -10,7 +10,7 @@ def readme():
 setup(
     name='rootbeer',
     version='1.0.0',
-    description='The easy to use and very epic static site generator for blogs!',
+    description='The easy to use and very epic Static Site Generator for blogs!',
     long_description=readme(),
     long_description_content_type='text/markdown',
     url='https://github.com/BreadcrumbIsTaken/RootbeerSSG',
@@ -26,9 +26,19 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Static Site Generation',
-        'Topic :: Static Site Generation :: Blogs'
+        'Topic :: Static Site Generation :: Blogs',
+        'Topic :: Static Site Generation :: Pages',
+        'Topic :: Static Site Generation :: Blogs and Pages'
     ],
     packages=['rootbeer'],
     include_package_data=True,
-    install_requires=['colorama', 'Jinaj2', 'Markdown', 'markdown-full-yaml-metadata', 'MarkupSafe', 'PyYAML']
+    install_requires=[
+        'colorama',
+        'Jinaj2',
+        'Markdown',
+        'markdown-full-yaml-metadata',
+        'MarkupSafe',
+        'PyYAML',
+        'slug'
+    ]
 )

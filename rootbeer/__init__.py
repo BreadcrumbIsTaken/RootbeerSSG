@@ -91,7 +91,17 @@ class RootbeerSSG:
 
         # ===== FUNCTION CALLS =====
         rb_create_and_or_clean_path(self.out_dir)
+
+        if self.log_steps:
+            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
+
+        if self.config['log_rootbeer_steps']:
+            print(f'    {Fore.LIGHTMAGENTA_EX}Loading site content. . .')
+
         self._rb_load_site_content()
+
+        if self.config['log_rootbeer_steps']:
+            print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!')
 
         # ===== CONTENT SORTING =====
         self.pages: list = list()
@@ -102,7 +112,13 @@ class RootbeerSSG:
             elif cont['metadata']['type'] == 'post':
                 self.posts.append(cont)
 
+        if self.config['log_rootbeer_steps']:
+            print(f'    {Fore.CYAN}Rendering content types. . .')
         self._rb_render_all_content_types()
+
+        if self.config['log_rootbeer_steps']:
+            print(f'    {Fore.LIGHTMAGENTA_EX}Rendered content types!')
+
         self._rb_render_index_page()
 
         # ===== SITE GEN FINISHED =====
@@ -117,8 +133,6 @@ class RootbeerSSG:
         """
         # Creates the directory that contains the markdown if it does not exist already.
         rb_create_path_if_does_not_exist(self.cont_dir)
-        if self.log_steps:
-            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
 
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):

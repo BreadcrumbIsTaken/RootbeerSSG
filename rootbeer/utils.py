@@ -42,11 +42,11 @@ def rb_copy_static_files_to_public_directory(path1: str, path2: str, log_steps: 
     :return: None
     """
     if log_steps:
-        print(f'{Fore.CYAN}Transfering static files to "{Fore.YELLOW}{path2}/{Fore.CYAN}". . .')
+        print(f'        {Fore.CYAN}Transfering static files to "{Fore.YELLOW}{path2}/{Fore.CYAN}". . .')
     # Copy all static files (i.e. css/ img/) to the public folder so paths dont break.
     dir_util.copy_tree(f'{path1}/static', path2)
     if log_steps:
-        print(f'{Fore.GREEN}Successfully transfered the static files to "{Fore.YELLOW}{path2}/{Fore.GREEN}"!'
+        print(f'        {Fore.GREEN}Successfully transfered the static files to "{Fore.YELLOW}{path2}/{Fore.GREEN}"!'
               f'{Fore.RESET}')
 
 

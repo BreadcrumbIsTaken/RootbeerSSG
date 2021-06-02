@@ -12,8 +12,8 @@ site_title: RootbeerSSG!
 
 url: http://localhost:8000
 
-pretty_permalinks_on_posts: false
-pretty_permalinks_on_pages: true
+pretty_permalinks_on_posts: true
+pretty_permalinks_on_pages: false
 
 sort_posts_by: date
 sort_pages_by: title
@@ -40,7 +40,7 @@ list_of_required_metadata_fields:
 markdown_extentions:
   # The first value is the extentions's install name.
   # The second value is the extention's import name.
-  # If you are doing a built in markdown extention, then just do ~ or markdown
+  # If you are doing a built in markdown extention, then just do ~, null, or markdown
   # Example:
   # ~: fenced_code
   markdown-full-yaml-metadata: full_yaml_metadata
