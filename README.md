@@ -13,11 +13,14 @@
 [![Open source.](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/BreadcrumbIsTaken/RootbeerSSG)
 [![Built with swag](https://forthebadge.com/images/badges/built-with-swag.svg)](https://forthebadge.com)
 
-# What is Rootbeer? 🤔
+# What is RootbeerSSG? 🤔
 
-RootbeerSSG (or simply just Rootbeer) is a Static Site Generator for generating blogs.
+RootbeerSSG (or Rootbeer as I call it 100% of the time) is a <abbr title="Static Site Generator">SSG</abbr> that specilises in making static blogs.
+It can easily integrate with things like [Staticman](https://staticman.net). You can also quickly deploy it to the free hosting platform [Netlify](https://netlify.com)
 
-# How to download Rootbeer
+Rootbeer is aimed for people who are new too things like Static Site Generators and strives to make it as easy as possible.
+
+# How to download Rootbeer 🔻
 
 It's easy!
 
@@ -34,8 +37,40 @@ Or
 python3 -m pip install rootbeer
 ```
 
+## Running on your machine 💻:
+The recommended way to install Rootbeer is to make a Virtual Envrionment. You will need a package called `venv`
+If you don't have the `venv` module, you can install it like this:
+```shell
+pip install venv
+```
+You can do so by putting this in your console:
+```shell
+python -m venv env
+```
+and it will create a folder called `env`. You can call it whatever you want.
+Now to activate it, in your console run
+```shell
+env\Scripts\activate
+```
+if you are on Windows.
+
+Great! You have your virtual environment!
+Now all you have to do is install the dependincies.
+Do
+```shell
+pip install -r requirements.txt
+```
+and it should install all requirements.
+Now to compile everything, run:
+```shell
+python rootbeer.py
+```
+And you did it!
+If you want to deactivate the virtual environment, just run
+```shell
+deactivate
+```
+
 # Why tho???
 
-Because I felt like it lol and WordPress is the monez
-
-<p xmlns:cc="http://creativecommons.org/ns#" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/BreadcrumbIsTaken/RootbeerSSG">RootbeerSSG</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/BreadcrumbIsTaken/">BreadcrumbIsTaken</a> is licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">CC BY-SA 4.0<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1"><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1"></a></p> 
+Because I felt like it lol and [WordPress](https://wordpress.org) hosting is the monez
