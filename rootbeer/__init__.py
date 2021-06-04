@@ -9,6 +9,7 @@ from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, Template
 from slug import slug
 from yaml import safe_load
+from paginate import Page
 
 # rootbeer Imports
 from .utils import *
@@ -64,6 +65,7 @@ class RootbeerSSG:
         self.content: list = list()
         self.list_of_files_generated: list = list()
         self.content_types: list = ['post', 'page']
+        self.items_per_page: str = self.config['pagination_items_per_page']
 
         self.log_steps = self.config['log_rootbeer_steps']
 
@@ -102,6 +104,8 @@ class RootbeerSSG:
 
         if self.config['log_rootbeer_steps']:
             print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!')
+
+        self.pagination: Page = Page(self.content, items_per_page=self.items_per_page)
 
         # ===== CONTENT SORTING =====
         self.pages: list = list()
@@ -227,6 +231,7 @@ class RootbeerSSG:
                     template.render(
                         this=item,
                         config=self.config,
+                        paginator=self.pagination
                     )
                 )
 

@@ -30,6 +30,8 @@ blog_directory: blog
 themes_dir: themes
 theme_name: RBDefault
 
+pagination_items_per_page: 10
+
 # The file extentions for your markdown files. DO NOT HAVE A . AT THE FRONT
 markdown_file_extention: md
 
