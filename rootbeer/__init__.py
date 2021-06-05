@@ -87,6 +87,8 @@ class RootbeerSSG:
         # ? Creates a new object with the full_yaml_metadata extention already activated.
         self.md: Markdown = Markdown(extensions=list_of_extentions_for_markdown)
         self.env: Environment = Environment(loader=FileSystemLoader(searchpath=search_path))
+        self.env.lstrip_blocks = True
+        self.env.trim_blocks = True
 
         # ===== OPTIONAL VARIABLES =====
         self.md_ext: str = self.config['markdown_file_extention']
@@ -231,7 +233,7 @@ class RootbeerSSG:
                     template.render(
                         this=item,
                         config=self.config,
-                        paginator=self.pagination
+                        paginator=self.pagination.pager('$link_previous ~2~ $link_next (Page $page of $page_count)', url=f'{self.config["url"]}/blog/$page')
                     )
                 )
 
