@@ -2,6 +2,7 @@
 from glob import glob
 from os import path
 from datetime import datetime
+# from pprint import pprint
 import pathlib
 
 # Module Imports
@@ -9,7 +10,7 @@ from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, Template
 from slug import slug
 from yaml import safe_load
-from paginate import Page
+# from paginate import Page
 
 # rootbeer Imports
 from .utils import *
@@ -107,7 +108,7 @@ class RootbeerSSG:
         if self.config['log_rootbeer_steps']:
             print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!')
 
-        self.pagination: Page = Page(self.content, items_per_page=self.items_per_page)
+        # self.pagination: Page = Page(self.content, items_per_page=self.items_per_page)
 
         # ===== CONTENT SORTING =====
         self.pages: list = list()
@@ -126,6 +127,8 @@ class RootbeerSSG:
             print(f'    {Fore.LIGHTMAGENTA_EX}Rendered content types!')
 
         self._rb_render_index_page()
+
+        self._rb_render_post_archive_pages()
 
         # ===== SITE GEN FINISHED =====
         print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
@@ -233,7 +236,8 @@ class RootbeerSSG:
                     template.render(
                         this=item,
                         config=self.config,
-                        paginator=self.pagination.pager('$link_previous ~2~ $link_next (Page $page of $page_count)', url=f'{self.config["url"]}/blog/$page')
+                        # paginator=self.pagination.pager(self.config['pagination_format'],
+                        #                                 url=f'{self.config["url"]}/{self.blog_dir}/archive/$page')
                     )
                 )
 
@@ -252,5 +256,21 @@ class RootbeerSSG:
                     posts=self.posts,
                     pages=self.pages,
                     config=self.config,
+                )
+            )
+
+        # pprint(self.pagination.link_map(self.config['pagination_format'],
+        #                                 url=f'{self.config["url"]}/{self.blog_dir}/archive/page-$page'))
+
+    def _rb_render_post_archive_pages(self) -> None:
+        template: Template = self.env.get_template('archive.html')
+        # for page in range(self.pagination.page_count):
+        #     page += 1
+        rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}/archive/')
+        with open(f'{self.out_dir}/{self.blog_dir}/archive/index.html', 'w') as archive:
+            archive.write(
+                template.render(
+                    posts=self.posts,
+                    config=self.config
                 )
             )
