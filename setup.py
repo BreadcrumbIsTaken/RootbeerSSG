@@ -31,7 +31,7 @@ setup(
     install_requires=[
         'blinker',
         'colorama',
-        'Jinaj2',
+        'Jinja2',
         'Markdown',
         'markdown-full-yaml-metadata',
         'MarkupSafe',
