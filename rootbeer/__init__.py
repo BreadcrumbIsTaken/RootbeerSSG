@@ -61,7 +61,7 @@ class RootbeerSSG:
         rb_create_path_if_does_not_exist(static_files_dir)
         rb_create_path_if_does_not_exist(pages_dir)
         rb_create_path_if_does_not_exist(posts_dir)
-        
+
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = self.config['site_title']
         self.pretty_p: bool = self.config['pretty_permalinks_on_posts']
