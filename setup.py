@@ -41,5 +41,7 @@ setup(
         'MarkupSafe',
         'PyYAML',
         'slug'
-    ]
+    ],
+    # zip_safe=False,
+    # package_data={'rootbeer': ['__init__.pyi']}
 )

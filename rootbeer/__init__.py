@@ -2,6 +2,7 @@
 from glob import glob
 from os import path
 from datetime import datetime
+from importlib import import_module
 # from pprint import pprint
 import pathlib
 
@@ -92,6 +93,12 @@ class RootbeerSSG:
         self.env.lstrip_blocks = True
         self.env.trim_blocks = True
 
+        # ===== PLUGIN LOADING =====
+        list_of_plugins = [plugin for plugin in self.config['plugins']]
+
+        for plugin in list_of_plugins:
+            import_module(f'plugins.{plugin}')
+
         # ===== OPTIONAL VARIABLES =====
         self.md_ext: str = self.config['markdown_file_extention']
 
@@ -99,15 +106,19 @@ class RootbeerSSG:
         rb_create_and_or_clean_path(self.out_dir)
 
         if self.log_steps:
-            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .')
+            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .{Fore.RESET}')
 
         if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTMAGENTA_EX}Loading site content. . .')
+            print(f'    {Fore.LIGHTMAGENTA_EX}Loading site content. . .{Fore.RESET}')
+
+        after_content_load.send(self)
 
         self._rb_load_site_content()
 
+        before_content_load.send(self)
+
         if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!')
+            print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!{Fore.RESET}')
 
         # self.pagination: Page = Page(self.content, items_per_page=self.items_per_page)
 
@@ -121,15 +132,28 @@ class RootbeerSSG:
                 self.posts.append(cont)
 
         if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.CYAN}Rendering content types. . .')
+            print(f'    {Fore.CYAN}Rendering content types. . .{Fore.RESET}')
+
+        before_content_render.send(self)
+
         self._rb_render_all_content_types()
 
+        after_content_render.send(self)
+
         if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTMAGENTA_EX}Rendered content types!')
+            print(f'    {Fore.LIGHTMAGENTA_EX}Rendered content types!{Fore.RESET}')
+
+        before_render_index.send(self)
 
         self._rb_render_index_page()
 
+        after_render_index.send(self)
+
+        before_render_archive.send(self)
+
         self._rb_render_post_archive_pages()
+
+        after_render_archive.send(self)
 
         # ===== SITE GEN FINISHED =====
         print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
@@ -149,6 +173,7 @@ class RootbeerSSG:
             with open(file) as content_file:
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
+                during_content_load.send(self)
 
             item: dict = dict()
             # ? Assigns the file name to the item
@@ -231,6 +256,8 @@ class RootbeerSSG:
             template: Template = self.env.get_template(f'{item["metadata"]["type"]}.html')
             content_path = item['url']
 
+            during_content_render.send(self)
+
             pathlib.Path(content_path).mkdir(parents=True, exist_ok=True)
             with open(f'{content_path}/index.html', 'w') as file:
                 file.write(
@@ -252,6 +279,9 @@ class RootbeerSSG:
         """
         template: Template = self.env.get_template('index.html')
         with open(f'{self.out_dir}/index.html', 'w') as index_file:
+
+            during_render_index.send(self)
+
             index_file.write(
                 template.render(
                     posts=self.posts,
@@ -269,6 +299,9 @@ class RootbeerSSG:
         #     page += 1
         rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}/archive/')
         with open(f'{self.out_dir}/{self.blog_dir}/archive/index.html', 'w') as archive:
+
+            during_render_archive.send(self)
+
             archive.write(
                 template.render(
                     posts=self.posts,

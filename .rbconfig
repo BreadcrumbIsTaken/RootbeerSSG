@@ -52,3 +52,6 @@ auto_install_markdown_extentions: false
 log_rootbeer_steps: true
 
 render_authors_pages: true
+
+plugins:
+  - test_plugin
