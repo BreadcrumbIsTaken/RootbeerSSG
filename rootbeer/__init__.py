@@ -43,8 +43,6 @@ class RootbeerSSG:
         if 'list_of_required_metadata_fields' in self.config:
             # This just makes it so that the "title" metadata feild is required by default
             list_of_required_metadata_fields = ['title', 'date']
-            if self.config['render_authors_pages']:
-                list_of_required_metadata_fields.append('author')
         if 'markdown_extentions' in self.config:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
