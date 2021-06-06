@@ -11,5 +11,5 @@ public/
 poetry.lock
 pyproject.toml
 
-test.py
-test.py
+dist/
+rootbeer.egg-info/

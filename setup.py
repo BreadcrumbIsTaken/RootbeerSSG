@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 def readme():
-    with open('README.md') as rm:
+    with open('README.md', 'r', encoding='utf-8') as rm:
         readme_file = rm.read()
     return readme_file
 
@@ -22,13 +22,8 @@ setup(
         'Programming Language :: Python :: 3.8.6',
         'Operating System :: OS Independent',
         'Natural Language :: English',
-        'Framework :: Rootbeer',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
-        'Topic :: Static Site Generation',
-        'Topic :: Static Site Generation :: Blogs',
-        'Topic :: Static Site Generation :: Pages',
-        'Topic :: Static Site Generation :: Blogs and Pages'
     ],
     packages=['rootbeer'],
     include_package_data=True,
