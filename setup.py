@@ -18,12 +18,13 @@ setup(
     license='CC BY-SA 4.0',
     classifiers=[
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.9.0',
-        'Programming Language :: Python :: 3.8.6',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.8',
         'Operating System :: OS Independent',
         'Natural Language :: English',
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Development Status :: 4 - Beta'
     ],
     packages=['rootbeer'],
     include_package_data=True,
