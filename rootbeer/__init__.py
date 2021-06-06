@@ -15,6 +15,7 @@ from yaml import safe_load
 # rootbeer Imports
 from .utils import *
 from .errors import *
+from .signals import *
 
 
 class RootbeerSSG:

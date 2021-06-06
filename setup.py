@@ -33,6 +33,7 @@ setup(
     packages=['rootbeer'],
     include_package_data=True,
     install_requires=[
+        'blinker',
         'colorama',
         'Jinaj2',
         'Markdown',
