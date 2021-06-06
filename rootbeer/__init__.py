@@ -50,8 +50,18 @@ class RootbeerSSG:
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
 
         plugins_dir: str = 'plugins/__init__.py'
+        content_dir: str = self.config['content_directory']
+        themes_dir: str = 'themes'
+        static_files_dir: str = f'{self.config["content_directory"]}/static'
+        pages_dir: str = f'{self.config["content_directory"]}/pages'
+        posts_dir: str = f'{self.config["content_directory"]}/posts'
         rb_create_path_if_does_not_exist(plugins_dir)
-
+        rb_create_path_if_does_not_exist(content_dir)
+        rb_create_path_if_does_not_exist(themes_dir)
+        rb_create_path_if_does_not_exist(static_files_dir)
+        rb_create_path_if_does_not_exist(pages_dir)
+        rb_create_path_if_does_not_exist(posts_dir)
+        
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = self.config['site_title']
         self.pretty_p: bool = self.config['pretty_permalinks_on_posts']
