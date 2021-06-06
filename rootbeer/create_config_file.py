@@ -1,3 +1,6 @@
+from os import path
+
+config_file_defualt_contents = '''
 # ===== NOTE =====
 # ALL URLS AND FOLDER DIRS SHOULD NOT HAVE A TRAILING SLASH.
 # DO:
@@ -55,3 +58,10 @@ render_authors_pages: true
 
 #plugins:
 #  - ~
+'''
+
+
+def rb_create_default_config_file(config_file) -> None:
+    if not path.exists(config_file):
+        with open(config_file, 'w') as file:
+            file.write(config_file_defualt_contents)

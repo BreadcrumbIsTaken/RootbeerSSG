@@ -17,6 +17,7 @@ from yaml import safe_load
 from .utils import *
 from .errors import *
 from .signals import *
+from .create_config_file import rb_create_default_config_file
 
 
 class RootbeerSSG:
@@ -29,6 +30,8 @@ class RootbeerSSG:
 
         :return: None
         """
+
+        rb_create_default_config_file(config_file)
 
         # ===== READ CONFIG =====
         with open(config_file, 'r') as config_f:
@@ -45,6 +48,9 @@ class RootbeerSSG:
         if 'markdown_extentions' in self.config:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
+
+        plugins_dir: str = 'plugins/__init__.py'
+        rb_create_path_if_does_not_exist(plugins_dir)
 
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = self.config['site_title']
@@ -94,10 +100,11 @@ class RootbeerSSG:
         self.env.trim_blocks = True
 
         # ===== PLUGIN LOADING =====
-        list_of_plugins = [plugin for plugin in self.config['plugins']]
+        if 'plugins' in self.config:
+            list_of_plugins = [plugin for plugin in self.config['plugins']]
 
-        for plugin in list_of_plugins:
-            import_module(f'plugins.{plugin}')
+            for plugin in list_of_plugins:
+                import_module(f'plugins.{plugin}')
 
         # ===== OPTIONAL VARIABLES =====
         self.md_ext: str = self.config['markdown_file_extention']
