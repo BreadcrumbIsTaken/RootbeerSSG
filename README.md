@@ -70,6 +70,33 @@ If you want to deactivate the virtual environment, just run
 ```shell
 deactivate
 ```
+# How to use Rootbeer 💡
+
+Rootbeer has two types of content: `pages` and `posts`. `pages` are, well, you know. Pages.
+`posts` are the things you write and are stored in the blog folder.
+
+Rootbeer supports Markdown for the `posts` and `pages`. They will be rendered into HTML.
+
+For more info, take a look at the Wiki section on the GitHub.
+
+# How to preview your site on your local machine 🍃
+
+You can do this in your terminal:
+```shell
+cd public
+```
+and then:
+```shell
+python -m http.server
+```
+
+and then you can go too [localhost:8000](http://localhost:8000) and BOOM! You have your site running!
+
+# How customizable is Rootbeer? 🎨
+
+How does PLUGINS and THEMES sound?
+
+See the Wiki for more info.
 
 # Why tho???
 
