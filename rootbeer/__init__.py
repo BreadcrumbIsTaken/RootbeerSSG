@@ -53,8 +53,8 @@ class RootbeerSSG:
             self.config['content_directory'],
             'themes',
             f'{self.config["content_directory"]}/static',
-            f'{self.config["content_directory"]}/pages'
-            f'{self.config["content_directory"]}/posts'
+            f'{self.config["content_directory"]}/pages',
+            f'{self.config["content_directory"]}/posts',
         ]
 
         for file in list_of_files_to_gen:
