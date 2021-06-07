@@ -18,6 +18,7 @@ from .utils import *
 from .errors import *
 from .signals import *
 from .create_config_file import rb_create_default_config_file
+from .create_default_theme import rb_create_default_theme
 
 
 class RootbeerSSG:
@@ -47,18 +48,23 @@ class RootbeerSSG:
             # This makes sure that the yaml markdown extentions is installed at all times.
             markdown_extentions = {'markdown-full-yaml-metadata': 'full_yaml_metadata'}
 
-        plugins_dir: str = 'plugins/__init__.py'
-        content_dir: str = self.config['content_directory']
-        themes_dir: str = 'themes'
-        static_files_dir: str = f'{self.config["content_directory"]}/static'
-        pages_dir: str = f'{self.config["content_directory"]}/pages'
-        posts_dir: str = f'{self.config["content_directory"]}/posts'
-        rb_create_path_if_does_not_exist(plugins_dir)
-        rb_create_path_if_does_not_exist(content_dir)
-        rb_create_path_if_does_not_exist(themes_dir)
-        rb_create_path_if_does_not_exist(static_files_dir)
-        rb_create_path_if_does_not_exist(pages_dir)
-        rb_create_path_if_does_not_exist(posts_dir)
+        list_of_files_to_gen: list = [
+            'plugins',
+            self.config['content_directory'],
+            'themes',
+            f'{self.config["content_directory"]}/static',
+            f'{self.config["content_directory"]}/pages'
+            f'{self.config["content_directory"]}/posts'
+        ]
+
+        for file in list_of_files_to_gen:
+            rb_create_path_if_does_not_exist(file)
+
+        with open('plugins/__init__.py', 'w') as plugins_main:
+            plugins_main.write('# :) hi')
+
+        if not path.exists(f'{self.config["themes_dir"]}/RBDefault'):
+            rb_create_default_theme(self.config['themes_dir'])
 
         # ===== GLOBAL VARIABLES =====
         self.site_title: str = self.config['site_title']

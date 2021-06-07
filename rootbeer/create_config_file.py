@@ -21,8 +21,8 @@ pretty_permalinks_on_pages: false
 sort_posts_by: date
 sort_pages_by: title
 
-sort_posts_reverse: true
-sort_pages_reverse: false
+sort_posts_reverse: false
+sort_pages_reverse: true
 
 date_format_for_content: "%m/%d/%y at %H:%M"
 
@@ -32,9 +32,6 @@ blog_directory: blog
 
 themes_dir: themes
 theme_name: RBDefault
-
-pagination_items_per_page: 1
-#pagination_format: $link_previous ~2~ $link_next (Page $page of $page_count)
 
 # The file extentions for your markdown files. DO NOT HAVE A . AT THE FRONT
 markdown_file_extention: md
@@ -53,11 +50,6 @@ markdown_extentions:
 auto_install_markdown_extentions: false
 
 log_rootbeer_steps: true
-
-render_authors_pages: true
-
-#plugins:
-#  - ~
 '''
 
 

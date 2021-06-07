@@ -53,31 +53,26 @@ Now to activate it, in your console run
 env\Scripts\activate
 ```
 if you are on Windows.
-
 Great! You have your virtual environment!
-Now all you have to do is install the dependincies.
-Do
-```shell
-pip install -r requirements.txt
-```
-and it should install all requirements.
-Now to compile everything, run:
-```shell
-python rootbeer.py
-```
-And you did it!
 If you want to deactivate the virtual environment, just run
 ```shell
 deactivate
 ```
 # How to use Rootbeer 💡
 
+All you have to do is:
+```python
+from rootbeer import RootbeerSSG
+
+rb = RootbeerSSG()
+```
+and run the file!!!
+Then write away! For more info, take a look at the Wiki section on the GitHub.
+
 Rootbeer has two types of content: `pages` and `posts`. `pages` are, well, you know. Pages.
 `posts` are the things you write and are stored in the blog folder.
 
 Rootbeer supports Markdown for the `posts` and `pages`. They will be rendered into HTML.
-
-For more info, take a look at the Wiki section on the GitHub.
 
 # How to preview your site on your local machine 🍃
 

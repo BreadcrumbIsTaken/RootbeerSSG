@@ -4,13 +4,7 @@
         <title>{{ config.site_title }}</title>
     </head>
     <body>
-
-        {% from 'paginator.html' import pagination as p %}
-
         <h1>{{ this.metadata.title }}</h1>
         {{ this.content }}
-
-        {{ p(paginator) }}
-
     </body>
 </html>
