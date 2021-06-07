@@ -88,7 +88,6 @@ class RootbeerSSG:
         self.content: list = list()
         self.list_of_files_generated: list = list()
         self.content_types: list = ['post', 'page']
-        self.items_per_page: str = self.config['pagination_items_per_page']
 
         self.log_steps = self.config['log_rootbeer_steps']
 
