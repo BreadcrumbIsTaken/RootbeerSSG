@@ -1,3 +1,5 @@
+from .utils import rb_create_and_or_clean_path
+
 archive_html_content: str = '''
 <!doctype html>
 <html lang="en">
@@ -60,6 +62,7 @@ post_html_content = '''
 
 
 def rb_create_default_theme(theme_dir: str) -> None:
+    rb_create_and_or_clean_path(f'{theme_dir}/RBDefault')
     with open(theme_dir + '/RBDefault/index.html', 'w') as i_file:
         i_file.write(index_html_content)
     with open(theme_dir + '/RBDefault/archive.html', 'w') as i_file:
