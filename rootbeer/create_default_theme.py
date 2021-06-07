@@ -58,6 +58,7 @@ post_html_content = '''
         {{ this.content }}
     </body>
 </html>
+
 '''
 
 
@@ -70,4 +71,4 @@ def rb_create_default_theme(theme_dir: str) -> None:
     with open(theme_dir + '/RBDefault/page.html', 'w') as i_file:
         i_file.write(page_html_content)
     with open(theme_dir + '/RBDefault/post.html', 'w') as i_file:
-        i_file.write(index_html_content)
+        i_file.write(post_html_content)
