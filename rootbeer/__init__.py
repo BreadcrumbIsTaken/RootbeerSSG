@@ -3,7 +3,6 @@ from glob import glob
 from os import path
 from datetime import datetime
 from importlib import import_module
-# from pprint import pprint
 import pathlib
 
 # Module Imports
@@ -11,7 +10,6 @@ from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, Template
 from slug import slug
 from yaml import safe_load
-# from paginate import Page
 
 # rootbeer Imports
 from .utils import *
@@ -89,8 +87,6 @@ class RootbeerSSG:
         self.list_of_files_generated: list = list()
         self.content_types: list = ['post', 'page']
 
-        self.log_steps = self.config['log_rootbeer_steps']
-
         # ===== VARIABLES =====
         list_of_extentions_for_markdown: list = list()
         search_path: str = f'{self.themes_dir}/{self.theme}'
@@ -125,22 +121,13 @@ class RootbeerSSG:
         # ===== FUNCTION CALLS =====
         rb_create_and_or_clean_path(self.out_dir)
 
-        if self.log_steps:
-            print(f'{Fore.LIGHTYELLOW_EX}Generating Site. . .{Fore.RESET}')
-
-        if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTMAGENTA_EX}Loading site content. . .{Fore.RESET}')
+        print(f'Generating Site. . .')
 
         after_content_load.send(self)
 
         self._rb_load_site_content()
 
         before_content_load.send(self)
-
-        if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTGREEN_EX}Finished loaded site content!{Fore.RESET}')
-
-        # self.pagination: Page = Page(self.content, items_per_page=self.items_per_page)
 
         # ===== CONTENT SORTING =====
         self.pages: list = list()
@@ -151,17 +138,11 @@ class RootbeerSSG:
             elif cont['metadata']['type'] == 'post':
                 self.posts.append(cont)
 
-        if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.CYAN}Rendering content types. . .{Fore.RESET}')
-
         before_content_render.send(self)
 
         self._rb_render_all_content_types()
 
         after_content_render.send(self)
-
-        if self.config['log_rootbeer_steps']:
-            print(f'    {Fore.LIGHTMAGENTA_EX}Rendered content types!{Fore.RESET}')
 
         before_render_index.send(self)
 
@@ -176,8 +157,7 @@ class RootbeerSSG:
         after_render_archive.send(self)
 
         # ===== SITE GEN FINISHED =====
-        print(Fore.GREEN + f'Site generation {Fore.CYAN}complete!{Fore.GREEN} Your static files can be found in '
-                           f'"{Fore.YELLOW}{self.out_dir}/{Fore.GREEN}".' + Fore.RESET)
+        print(f'Site generation complete! Your static files can be found in "{self.out_dir}/".')
 
     def _rb_load_site_content(self) -> None:
         """
@@ -284,12 +264,10 @@ class RootbeerSSG:
                     template.render(
                         this=item,
                         config=self.config,
-                        # paginator=self.pagination.pager(self.config['pagination_format'],
-                        #                                 url=f'{self.config["url"]}/{self.blog_dir}/archive/$page')
                     )
                 )
 
-        rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir, self.log_steps)
+        rb_copy_static_files_to_public_directory(self.cont_dir, self.out_dir)
 
     def _rb_render_index_page(self) -> None:
         """

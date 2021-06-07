@@ -48,8 +48,6 @@ markdown_extentions:
   # ~: fenced_code
   markdown-full-yaml-metadata: full_yaml_metadata
 auto_install_markdown_extentions: false
-
-log_rootbeer_steps: true
 '''
 
 

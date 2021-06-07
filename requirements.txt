@@ -1,5 +1,4 @@
 blinker==1.4
-colorama==0.4.4
 Jinja2==3.0.0
 Markdown==3.3.4
 markdown-full-yaml-metadata==2.0.1

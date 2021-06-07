@@ -30,7 +30,6 @@ setup(
     include_package_data=True,
     install_requires=[
         'blinker',
-        'colorama',
         'Jinja2',
         'Markdown',
         'markdown-full-yaml-metadata',
