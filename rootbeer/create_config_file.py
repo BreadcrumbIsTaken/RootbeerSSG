@@ -1,6 +1,7 @@
 from os import path
 
 config_file_defualt_contents = '''
+
 # ===== NOTE =====
 # ALL URLS AND FOLDER DIRS SHOULD NOT HAVE A TRAILING SLASH.
 # DO:
@@ -15,14 +16,14 @@ site_title: RootbeerSSG!
 
 url: http://localhost:8000
 
-pretty_permalinks_on_posts: true
-pretty_permalinks_on_pages: false
+pretty_permalinks_on_posts: false
+pretty_permalinks_on_pages: true
 
 sort_posts_by: date
 sort_pages_by: title
 
-sort_posts_reverse: false
-sort_pages_reverse: true
+sort_posts_reverse: true
+sort_pages_reverse: false
 
 date_format_for_content: "%m/%d/%y at %H:%M"
 
@@ -47,7 +48,7 @@ markdown_extentions:
   # Example:
   # ~: fenced_code
   markdown-full-yaml-metadata: full_yaml_metadata
-auto_install_markdown_extentions: false
+auto_install_markdown_extentions: true
 '''
 
 

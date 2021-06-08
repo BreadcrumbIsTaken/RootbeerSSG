@@ -84,7 +84,6 @@ class RootbeerSSG:
         self.md_extentions: dict = self.config['markdown_extentions']
 
         self.content: list = list()
-        self.list_of_files_generated: list = list()
         self.content_types: list = ['post', 'page']
 
         # ===== VARIABLES =====
@@ -95,11 +94,6 @@ class RootbeerSSG:
         for ext in self.md_extentions:
             # Appends the import word into the list
             list_of_extentions_for_markdown.append(self.md_extentions[ext])
-
-        if self.config['auto_install_markdown_extentions']:
-            print(f'{Fore.MAGENTA}Installing markdown extentions. . .{Fore.RESET}')
-            rb_install_markdown_extras_modules(self.config['markdown_extentions'].keys())
-            print(f'{Fore.GREEN}Markdown extentions installed!{Fore.RESET}')
 
         # ===== INSTANCES =====
         # ? Creates a new object with the full_yaml_metadata extention already activated.
@@ -262,6 +256,7 @@ class RootbeerSSG:
             with open(f'{content_path}/index.html', 'w') as file:
                 file.write(
                     template.render(
+                        rootbeer=self,
                         this=item,
                         config=self.config,
                     )
@@ -285,6 +280,7 @@ class RootbeerSSG:
                     posts=self.posts,
                     pages=self.pages,
                     config=self.config,
+                    rootbeer=self
                 )
             )
 
@@ -303,6 +299,7 @@ class RootbeerSSG:
             archive.write(
                 template.render(
                     posts=self.posts,
-                    config=self.config
+                    config=self.config,
+                    rootbeer=self
                 )
             )
