@@ -3,11 +3,12 @@ from glob import glob
 from os import path
 from datetime import datetime
 from importlib import import_module
+from urllib.parse import urljoin
 import pathlib
 
 # Module Imports
 from markdown import Markdown
-from jinja2 import Environment, FileSystemLoader, Template
+from jinja2 import Environment, FileSystemLoader, Template, Markup
 from slug import slug
 from yaml import safe_load
 
@@ -74,6 +75,7 @@ class RootbeerSSG:
         self.theme: str = self.config['theme_name']
         self.themes_dir: str = self.config['themes_dir']
         self.date_format: str = self.config['date_format_for_content']
+        self.site_url: str = self.config['url']
 
         self.sort_pages: str = self.config['sort_pages_by']
         self.sort_pages_reversed: bool = self.config['sort_pages_reverse']
@@ -104,6 +106,10 @@ class RootbeerSSG:
         self.env: Environment = Environment(loader=FileSystemLoader(searchpath=search_path))
         self.env.lstrip_blocks = True
         self.env.trim_blocks = True
+
+        # ===== JINJA2 FILTERS =====
+        self.env.filters['mdify'] = lambda text: Markup(self.md.convert(text))
+        self.env.filters['abs_url'] = lambda url: self._rb_return_absolute_url(url)
 
         # ===== PLUGIN LOADING =====
         if 'plugins' in self.config:
@@ -275,7 +281,6 @@ class RootbeerSSG:
         """
         template: Template = self.env.get_template('index.html')
         with open(f'{self.out_dir}/index.html', 'w') as index_file:
-
             during_render_index.send(self)
 
             index_file.write(
@@ -296,7 +301,6 @@ class RootbeerSSG:
         #     page += 1
         rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}/archive/')
         with open(f'{self.out_dir}/{self.blog_dir}/archive/index.html', 'w') as archive:
-
             during_render_archive.send(self)
 
             archive.write(
@@ -306,3 +310,6 @@ class RootbeerSSG:
                     rootbeer=self
                 )
             )
+
+    def _rb_return_absolute_url(self, rel_url: str) -> str:
+        return urljoin(self.site_url, rel_url)
