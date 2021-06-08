@@ -90,6 +90,9 @@ class RootbeerSSG:
         list_of_extentions_for_markdown: list = list()
         search_path: str = f'{self.themes_dir}/{self.theme}'
 
+        if self.config['auto_install_markdown_extentions']:
+            rb_install_markdown_extras_modules(self.config['markdown_extentions'].keys())
+
         # ===== PREPROCESSORS =====
         for ext in self.md_extentions:
             # Appends the import word into the list
