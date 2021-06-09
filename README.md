@@ -12,6 +12,11 @@
 [![Mom made pizza rolls](https://forthebadge.com/images/badges/mom-made-pizza-rolls.svg)](https://forthebadge.com)
 [![Open source.](https://forthebadge.com/images/badges/open-source.svg)](https://github.com/BreadcrumbIsTaken/RootbeerSSG)
 [![Built with swag](https://forthebadge.com/images/badges/built-with-swag.svg)](https://forthebadge.com)
+[![Pypi Version](https://img.shields.io/pypi/v/rootbeer?style=for-the-badge)](https://pypi/project/rootbeer)
+[![Total Lines of Code](https://img.shields.io/tokei/lines/github/BreadcrumbIsTaken/RootbeerSSG?style=for-the-badge)](https://github.com/BreadcrumbIsTaken)
+[![License: CC BY SA 4.0](https://img.shields.io/pypi/l/rootbeer?style=for-the-badge)](https://pypi/project/rootbeer)
+[![Python versions](https://img.shields.io/pypi/pyversions/rootbeer?style=for-the-badge)](https://pypi/project/rootbeer)
+[![Status](https://img.shields.io/pypi/status/rootbeer?style=for-the-badge)](https://pypi/project/rootbeer)
 
 # What is RootbeerSSG? 🤔
 
