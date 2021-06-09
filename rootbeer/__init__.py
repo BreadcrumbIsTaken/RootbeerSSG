@@ -155,9 +155,15 @@ class RootbeerSSG:
 
         before_render_archive.send(self)
 
-        self._rb_render_post_archive_pages()
+        self._rb_render_post_archive_page()
 
         after_render_archive.send(self)
+
+        before_render_blog_index.send(self)
+
+        self._rb_render_blog_page_index()
+
+        after_render_blog_index.send(self)
 
         # ===== SITE GEN FINISHED =====
         print(f'Site generation complete! Your static files can be found in "{self.out_dir}/".')
@@ -173,7 +179,7 @@ class RootbeerSSG:
 
         # Cycles through all the files in any folders in the contetn directory.
         for file in glob(f'{self.cont_dir}/**/*.{self.md_ext}', recursive=True):
-            with open(file) as content_file:
+            with open(file, 'r', encoding='utf-8') as content_file:
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
                 during_content_load.send(self)
@@ -262,7 +268,7 @@ class RootbeerSSG:
             during_content_render.send(self)
 
             pathlib.Path(content_path).mkdir(parents=True, exist_ok=True)
-            with open(f'{content_path}/index.html', 'w') as file:
+            with open(f'{content_path}/index.html', 'w', encoding='utf-8') as file:
                 file.write(
                     template.render(
                         rootbeer=self,
@@ -280,7 +286,7 @@ class RootbeerSSG:
         :return: None
         """
         template: Template = self.env.get_template('index.html')
-        with open(f'{self.out_dir}/index.html', 'w') as index_file:
+        with open(f'{self.out_dir}/index.html', 'w', encoding='utf-8') as index_file:
             during_render_index.send(self)
 
             index_file.write(
@@ -295,12 +301,12 @@ class RootbeerSSG:
         # pprint(self.pagination.link_map(self.config['pagination_format'],
         #                                 url=f'{self.config["url"]}/{self.blog_dir}/archive/page-$page'))
 
-    def _rb_render_post_archive_pages(self) -> None:
+    def _rb_render_post_archive_page(self) -> None:
         template: Template = self.env.get_template('archive.html')
         # for page in range(self.pagination.page_count):
         #     page += 1
         rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}/archive/')
-        with open(f'{self.out_dir}/{self.blog_dir}/archive/index.html', 'w') as archive:
+        with open(f'{self.out_dir}/{self.blog_dir}/archive/index.html', 'w', encoding='utf-8') as archive:
             during_render_archive.send(self)
 
             archive.write(
@@ -308,6 +314,20 @@ class RootbeerSSG:
                     posts=self.posts,
                     config=self.config,
                     rootbeer=self
+                )
+            )
+
+    def _rb_render_blog_page_index(self) -> None:
+        template: Template = self.env.get_template('blog.html')
+        rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}')
+        with open(f'{self.out_dir}/{self.blog_dir}/index.html', 'w', encoding='utf-8') as blog_index:
+            during_render_blog_index.send(self)
+
+            blog_index.write(
+                template.render(
+                    posts=self.posts,
+                    config=self.config,
+                    rootbeer=self,
                 )
             )
 

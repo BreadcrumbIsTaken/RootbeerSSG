@@ -15,3 +15,7 @@ after_render_index: NamedSignal = signal('after_render_index')
 before_render_archive: NamedSignal = signal('before_render_archive')
 during_render_archive: NamedSignal = signal('during_render_archive')
 after_render_archive: NamedSignal = signal('after_render_archive')
+
+before_render_blog_index: NamedSignal = signal('before_render_blog_index')
+during_render_blog_index: NamedSignal = signal('during_render_blog_index')
+after_render_blog_index: NamedSignal = signal('after_render_blog_index')
