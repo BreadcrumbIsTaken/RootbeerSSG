@@ -182,11 +182,10 @@ class RootbeerSSG:
             with open(file, 'r', encoding='utf-8') as content_file:
                 # Parses the content and saves it to a variable.
                 parsed_content: str = self.md.convert(content_file.read())
-                during_content_load.send(self)
 
-            item: dict = dict()
+            self.item: dict = dict()
             # ? Assigns the file name to the item
-            item['file_name'] = content_file.name
+            self.item['file_name'] = content_file.name
 
             # Checks to see if the metadata is required.
             if self.required_metadata_fields:
@@ -201,15 +200,17 @@ class RootbeerSSG:
                                 f' required metadata: {field}.')
                         else:
                             # ? If all checks pass then assign the metadata to the item.
-                            item['metadata'] = self.md.Meta
+                            self.item['metadata'] = self.md.Meta
                 else:
                     # If there is no metadata when it is required, throw and error.
                     raise RBContentMissingMetadata(f'The file, "{content_file.name}", does not contain any metadata.')
 
-            item['date'] = self.md.Meta['date']
-            date: datetime = datetime.strptime(item['date'], self.date_format)
-            item['date'] = date
-            item['readable_date'] = date.strftime(self.date_format.replace('%H:%M', '%I:%M %p'))
+            during_content_load.send(self)
+
+            self.item['date'] = self.md.Meta['date']
+            date: datetime = datetime.strptime(self.item['date'], self.date_format)
+            self.item['date'] = date
+            self.item['readable_date'] = date.strftime(self.date_format.replace('%H:%M', '%I:%M %p'))
 
             # Gets the content's slug
             item_path: str = path.splitext(path.relpath(content_file.name))[0]
@@ -219,35 +220,35 @@ class RootbeerSSG:
                 # EX: content/pages
                 paths_to_remove.append(f'{ct}s')
             final_path_list: list = [word for word in item_path.split('\\') if word not in paths_to_remove]
-            item['slug'] = slug('/'.join(final_path_list))
+            self.item['slug'] = slug('/'.join(final_path_list))
 
             blog_out_dir = self.out_dir + '/' + self.blog_dir
 
             # Creates the content's url
-            if item['metadata']['type'] == 'post':
+            if self.item['metadata']['type'] == 'post':
                 if self.pretty_p:
-                    item['content_path_url'] = f'{blog_out_dir}/{item["slug"]}'
-                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["slug"]}'
+                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["slug"]}'
+                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["slug"]}'
                 else:
-                    item['content_path_url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
-                                               f'{item["date"].day:0>2}/{item["slug"]}'
-                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["date"].year}/' \
-                                  f'{item["date"].month:0>2}/{item["date"].day:0>2}/{item["slug"]}'
+                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["date"].year}/{self.item["date"].month:0>2}/' \
+                                               f'{self.item["date"].day:0>2}/{self.item["slug"]}'
+                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["date"].year}/' \
+                                  f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/{self.item["slug"]}'
 
-            if item['metadata']['type'] == 'page':
+            if self.item['metadata']['type'] == 'page':
                 if self.pretty_p_pages:
-                    item['content_path_url'] = f'{blog_out_dir}/{item["slug"]}'
-                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["slug"]}'
+                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["slug"]}'
+                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["slug"]}'
                 else:
-                    item['content_path_url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
-                                               f'{item["date"].day:0>2}/{item["slug"]}'
-                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["date"].year}/' \
-                                  f'{item["date"].month:0>2}/{item["date"].day:0>2}/{item["slug"]}'
-
+                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["date"].year}/{self.item["date"].month:0>2}/' \
+                                               f'{self.item["date"].day:0>2}/{self.item["slug"]}'
+                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["date"].year}/' \
+                                  f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/{self.item["slug"]}'
             # ? Finally, add the parsed content to the item.
-            item['content'] = parsed_content
+            self.item['content'] = parsed_content
+
             # Append it to the list of content.
-            self.content.append(item)
+            self.content.append(self.item)
 
             sort_content_types: dict = dict()
             sort_content_types['page'] = dict()

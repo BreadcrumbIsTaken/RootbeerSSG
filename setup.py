@@ -9,7 +9,7 @@ def readme():
 
 setup(
     name='rootbeer',
-    version='1.2.3',
+    version='1.2.4',
     description='The easy to use and very epic Static Site Generator for blogs!',
     long_description=readme(),
     long_description_content_type='text/markdown',
