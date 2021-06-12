@@ -147,6 +147,12 @@ class RootbeerSSG:
 
         after_content_render.send(self)
 
+        before_render_blog_index.send(self)
+
+        self._rb_render_blog_page_index()
+
+        after_render_blog_index.send(self)
+
         before_render_index.send(self)
 
         self._rb_render_index_page()
@@ -158,12 +164,6 @@ class RootbeerSSG:
         self._rb_render_post_archive_page()
 
         after_render_archive.send(self)
-
-        before_render_blog_index.send(self)
-
-        self._rb_render_blog_page_index()
-
-        after_render_blog_index.send(self)
 
         # ===== SITE GEN FINISHED =====
         print(f'Site generation complete! Your static files can be found in "{self.out_dir}/".')
@@ -226,17 +226,23 @@ class RootbeerSSG:
             # Creates the content's url
             if item['metadata']['type'] == 'post':
                 if self.pretty_p:
-                    item['url'] = f'{blog_out_dir}/{item["slug"]}'
+                    item['content_path_url'] = f'{blog_out_dir}/{item["slug"]}'
+                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["slug"]}'
                 else:
-                    item['url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/{item["date"].day:0>2}' \
-                                  f'/{item["slug"]}'
+                    item['content_path_url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
+                                               f'{item["date"].day:0>2}/{item["slug"]}'
+                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["date"].year}/' \
+                                  f'{item["date"].month:0>2}/{item["date"].day:0>2}/{item["slug"]}'
 
             if item['metadata']['type'] == 'page':
                 if self.pretty_p_pages:
-                    item['url'] = f'{self.out_dir}/{item["slug"]}'
+                    item['content_path_url'] = f'{blog_out_dir}/{item["slug"]}'
+                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["slug"]}'
                 else:
-                    item['url'] = f'{self.out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
-                                  f'{item["date"].day:0>2}/{item["slug"]}'
+                    item['content_path_url'] = f'{blog_out_dir}/{item["date"].year}/{item["date"].month:0>2}/' \
+                                               f'{item["date"].day:0>2}/{item["slug"]}'
+                    item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{item["date"].year}/' \
+                                  f'{item["date"].month:0>2}/{item["date"].day:0>2}/{item["slug"]}'
 
             # ? Finally, add the parsed content to the item.
             item['content'] = parsed_content
@@ -263,7 +269,7 @@ class RootbeerSSG:
         """
         for item in self.content:
             template: Template = self.env.get_template(f'{item["metadata"]["type"]}.html')
-            content_path = item['url']
+            content_path = item['content_path_url']
 
             during_content_render.send(self)
 
