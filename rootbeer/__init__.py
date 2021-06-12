@@ -147,12 +147,6 @@ class RootbeerSSG:
 
         after_content_render.send(self)
 
-        before_render_blog_index.send(self)
-
-        self._rb_render_blog_page_index()
-
-        after_render_blog_index.send(self)
-
         before_render_index.send(self)
 
         self._rb_render_index_page()
