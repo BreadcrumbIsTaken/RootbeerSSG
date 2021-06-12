@@ -323,19 +323,5 @@ class RootbeerSSG:
                 )
             )
 
-    def _rb_render_blog_page_index(self) -> None:
-        template: Template = self.env.get_template('blog.html')
-        rb_create_path_if_does_not_exist(f'{self.out_dir}/{self.blog_dir}')
-        with open(f'{self.out_dir}/{self.blog_dir}/index.html', 'w', encoding='utf-8') as blog_index:
-            during_render_blog_index.send(self)
-
-            blog_index.write(
-                template.render(
-                    posts=self.posts,
-                    config=self.config,
-                    rootbeer=self,
-                )
-            )
-
     def _rb_return_absolute_url(self, rel_url: str) -> str:
         return urljoin(self.site_url, rel_url)
