@@ -222,22 +222,26 @@ class RootbeerSSG:
             if self.item['metadata']['type'] == 'post':
                 if self.pretty_p:
                     self.item['content_path_url'] = f'{blog_out_dir}/{self.item["slug"]}'
-                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["slug"]}'
+                    self.item['url'] = f'{self.blog_dir}/{self.item["slug"]}'
                 else:
-                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["date"].year}/{self.item["date"].month:0>2}/' \
-                                               f'{self.item["date"].day:0>2}/{self.item["slug"]}'
-                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["date"].year}/' \
-                                  f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/{self.item["slug"]}'
+                    self.item[
+                        'content_path_url'] = f'{blog_out_dir}/{self.item["date"].year}/' \
+                                              f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/' \
+                                              f'{self.item["slug"]}'
+                    self.item['url'] = f'{self.blog_dir}/{self.item["date"].year}/' \
+                                       f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/{self.item["slug"]}'
 
             if self.item['metadata']['type'] == 'page':
                 if self.pretty_p_pages:
-                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["slug"]}'
-                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["slug"]}'
+                    self.item['content_path_url'] = f'{self.out_dir}/{self.item["slug"]}'
+                    self.item['url'] = f'{self.item["slug"]}'
                 else:
-                    self.item['content_path_url'] = f'{blog_out_dir}/{self.item["date"].year}/{self.item["date"].month:0>2}/' \
-                                               f'{self.item["date"].day:0>2}/{self.item["slug"]}'
-                    self.item['url'] = f'{blog_out_dir.replace(self.out_dir, "")}/{self.item["date"].year}/' \
-                                  f'{self.item["date"].month:0>2}/{self.item["date"].day:0>2}/{self.item["slug"]}'
+                    self.item[
+                        'content_path_url'] = f'{self.out_dir}/{self.item["date"].year}/' \
+                                              f'{self.item["date"].month:0>2}/' \
+                                              f'{self.item["date"].day:0>2}/{self.item["slug"]}'
+                    self.item['url'] = f'{self.item["date"].year}/{self.item["date"].month:0>2}/' \
+                                       f'{self.item["date"].day:0>2}/{self.item["slug"]}'
             # ? Finally, add the parsed content to the item.
             self.item['content'] = parsed_content
 
