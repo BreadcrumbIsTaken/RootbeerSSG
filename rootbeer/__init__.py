@@ -110,6 +110,7 @@ class RootbeerSSG:
         # ===== JINJA2 FILTERS =====
         self.env.filters['mdify'] = lambda text: Markup(self.md.convert(text))
         self.env.filters['abs_url'] = lambda url: self._rb_return_absolute_url(url)
+        self.env.filters['slugify'] = lambda text: slug(text)
 
         # ===== PLUGIN LOADING =====
         if 'plugins' in self.config:
