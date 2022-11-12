@@ -31,15 +31,15 @@ It's easy!
 
 All you have to do is open a terminal and put this line into it:
 ```bash
-pip install rootbeer
+pip install rootbeerSSG
 ```
 Or
 ```bash
-python -m pip install rootbeer
+python -m pip install rootbeerSSG
 ```
 Or
 ```bash
-python3 -m pip install rootbeer
+python3 -m pip install rootbeerSSG
 ```
 
 ## Running on your machine 💻:
@@ -67,7 +67,7 @@ deactivate
 
 All you have to do is:
 ```python
-from rootbeer import RootbeerSSG
+from rootbeerSSG import RootbeerSSG
 
 rb = RootbeerSSG()
 ```
