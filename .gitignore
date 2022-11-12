@@ -1,15 +1,9 @@
-# Pycharm Data
-.idea/
 # Python Data
 env/
 __pycache__/
 # rootbeer Data
 content/
 public/
-# Replit Data
-.replit
-poetry.lock
-pyproject.toml
 
 dist/
 rootbeer.egg-info/
